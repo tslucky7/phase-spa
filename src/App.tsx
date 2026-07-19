@@ -1,7 +1,7 @@
 import type { Task } from './types/types';
 import { Board } from './components/Board';
-import { useReducer } from 'react';
-import { tasksReducer } from './reducers/tasksReducer';
+import { useLocalStorage } from './hooks/useLocalStorage';
+import { STATUSES } from './types/types';
 
 const sampleTasks: Task[] = [
   { id: '1', title: '設計を書く', status: 'todo' },
@@ -10,14 +10,25 @@ const sampleTasks: Task[] = [
 ]
 
 function App() {
-  const [tasks, dispatch] = useReducer(tasksReducer, sampleTasks);
+  const [tasks, setTasks] = useLocalStorage<Task[]>('tasks', sampleTasks);
+  
+  const handleClick = (taskId: string) => {
+    setTasks((prev) =>
+      prev.map((task) => {
+        if (task.id !== taskId) return task;
+        const nextIndex = (STATUSES.indexOf(task.status) + 1) % STATUSES.length;
+        return { ...task, status: STATUSES[nextIndex] };
+      })
+    );
+  };
+  
   return (
     <div>
       <h1>title</h1>
       <Board
         tasks={tasks}
         onClick={(taskId) => {
-          dispatch({ type: 'CYCLE_STATUS', taskId });
+          handleClick(taskId);
         }}
       />
     </div>

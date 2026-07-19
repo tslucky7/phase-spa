@@ -7,8 +7,3 @@ export type Task = {
   title: string
   status: Status
 }
-
-export type TaskAction = {
-  type: 'CYCLE_STATUS'
-  taskId: string
-}
