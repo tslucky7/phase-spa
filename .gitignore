@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 typescript-fullstack-curriculum.md
 CLAUDE.md
+*storybook.log
+storybook-static
